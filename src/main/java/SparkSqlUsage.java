@@ -148,7 +148,7 @@ public class SparkSqlUsage {
         }
     }
 
-    public static void runSelfDefinedAverageFunction(SparkSession spark) {
+    private static void runSelfDefinedAverageFunction(SparkSession spark) {
         spark.udf().register("selfAverage", new SelfDefinedAverageFunction());
         Dataset<Row> df = spark.read().json("data/sparkSql/input/people.json");
         df.createOrReplaceTempView("people");
@@ -157,7 +157,7 @@ public class SparkSqlUsage {
         result.show();
     }
 
-    public static void runSaveAsJson(SparkSession spark, String inPath, String outPath) {
+    private static void runSaveAsJson(SparkSession spark, String inPath, String outPath) {
         Encoder<Person> personEncoder = Encoders.bean(Person.class);
         // Create an RDD of Person objects from a text file
         Dataset<Person> peopleDS = spark.read()
@@ -180,10 +180,10 @@ public class SparkSqlUsage {
                 //.config("spark.some.config.option", "some-value")
                 .getOrCreate();
 
-        //runQuery(spark);
-        //runDatasetCreation(spark);
-        //runDatasetCreation2(spark);
-        //runSelfDefinedAverageFunction(spark);
+        runQuery(spark);
+        runDatasetCreation(spark);
+        runDatasetCreation2(spark);
+        runSelfDefinedAverageFunction(spark);
         runSaveAsJson(spark, args[0], args[1]);
         spark.stop();
     }
